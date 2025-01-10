@@ -1,0 +1,26 @@
+{
+  "name": "prasi-base",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run system/bootstrap/dev.ts",
+    "prisma": "cd backend && bun prisma"
+  },
+  "workspaces": [
+    "backend/",
+    "frontend/",
+    "system/prasi-srv/"
+  ],
+  "dependencies": {
+    "prisma": "^6.2.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3"
+  }
+}
