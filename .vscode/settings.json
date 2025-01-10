@@ -12,9 +12,10 @@
     "node_modules": true,
     "bun.lockb": true,
     ".gitmodules": true,
-    "system": true
+    "backend/.gitignore": true
   },
   "hide-files.files": [
-    ".gitmodules"
+    ".gitmodules",
+    "backend/.gitignore"
   ]
 }
