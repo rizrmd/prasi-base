@@ -16,6 +16,10 @@
       "utils/*": [
         "./system/prasi-srv/internal/utils*"
       ],
+      "standalone/*": [
+        "./system/prasi-srv/standalone/*"
+      ],
+      
     },
     "lib": [
       "DOM",
