@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "bun run system/bootstrap/dev.ts",
+    "dev": "bun run system/bootstrap/dev.ts --silent",
     "prisma": "cd backend && bun prisma"
   },
   "workspaces": [
@@ -12,6 +12,7 @@
     "system/*"
   ],
   "dependencies": {
+    "@inquirer/input": "^4.1.1",
     "prisma": "^6.2.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
