@@ -34,6 +34,11 @@ if (!existsSync("./system/nova")) {
 if (!existsSync("./node_modules")) {
   console.log("Installing dependencies...");
   execSync("bun i", { stdio: "inherit" });
+
+  process.on("exit", () => {
+    execSync("bun run dev", { stdio: "inherit" });
+  });
+  process.exit();
 }
 
 if (!existsSync("./backend/.env")) {
