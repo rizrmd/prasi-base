@@ -36,6 +36,7 @@ if (!existsSync("./system/nova")) {
 }
 
 if (!existsSync("./backend/.env")) {
+  console.clear();
   console.log("Setting up database configuration...");
   const askDb = await input({
     message: "Do you want to configure DATABASE_URL? (y/N):",
@@ -58,5 +59,6 @@ if (!existsSync("./backend/.env")) {
     console.log("Skipping database configuration.");
   }
 }
+console.clear();
 
 await import("prasi-srv/standalone/server");
