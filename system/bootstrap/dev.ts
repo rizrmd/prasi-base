@@ -2,10 +2,6 @@ import { existsSync } from "fs";
 import { execSync } from "child_process";
 import input from "@inquirer/input";
 import { writeFileSync } from "fs";
-if (!existsSync("./node_modules")) {
-  console.log("Installing dependencies...");
-  execSync("bun i", { stdio: "inherit" });
-}
 if (!existsSync("./system/prasi-srv")) {
   console.log("Initializing submodules...");
 
@@ -33,6 +29,11 @@ if (!existsSync("./system/nova")) {
     execSync("cp -r ./tmp-prasi/frontend/src/nova/prod/* ./system/nova/");
     execSync("rm -rf ./tmp-prasi");
   }
+}
+
+if (!existsSync("./node_modules")) {
+  console.log("Installing dependencies...");
+  execSync("bun i", { stdio: "inherit" });
 }
 
 if (!existsSync("./backend/.env")) {
