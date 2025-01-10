@@ -1,0 +1,3 @@
+[submodule "prasi-srv"]
+	path = prasi-srv
+	url = https://github.com/rizrmd/prasi-srv
