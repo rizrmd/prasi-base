@@ -1,6 +1,5 @@
 import { existsSync } from "fs";
 import { execSync } from "child_process";
-import input from "@inquirer/input";
 import { writeFileSync } from "fs";
 
 let should_bun_install = false;
@@ -76,6 +75,8 @@ if (process.argv.includes("core")) {
 
 if (!existsSync("./backend/.env")) {
   console.clear();
+  const input = (await import("@inquirer/input")).default;
+
   console.log("Setting up database configuration...");
   const askDb = await input({
     message: "Do you want to configure DATABASE_URL? (y/N):",
