@@ -13,7 +13,7 @@
     "bun.lockb": true,
     ".gitmodules": true,
     "backend/.gitignore": true,
-    "system": false
+    "system": true
   },
   "hide-files.files": [
     ".gitmodules",

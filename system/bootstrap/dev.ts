@@ -12,7 +12,7 @@ if (!existsSync("./system/prasi-srv")) {
       stdio: "inherit",
     }
   );
-  should_bun_install = true
+  should_bun_install = true;
 }
 
 if (!existsSync("./system/nova")) {
@@ -35,7 +35,7 @@ if (!existsSync("./system/nova")) {
 
 if (!existsSync("./node_modules") || should_bun_install) {
   console.log("Installing dependencies...");
-  execSync("bun i", { stdio: "inherit" });
+  execSync("bun i --trust", { stdio: "inherit" });
 
   process.on("exit", () => {
     execSync("bun run dev", { stdio: "inherit" });
@@ -50,7 +50,7 @@ if (process.argv.includes("core")) {
 
   settings["files.exclude"] = {
     ...settings["files.exclude"],
-    "system": false
+    system: false,
   };
 
   if (!existsSync(".vscode")) {
@@ -64,7 +64,7 @@ if (process.argv.includes("core")) {
 
   settings["files.exclude"] = {
     ...settings["files.exclude"],
-    "system": true
+    system: true,
   };
 
   if (!existsSync(".vscode")) {
@@ -74,6 +74,16 @@ if (process.argv.includes("core")) {
 }
 
 if (!existsSync("./backend/.env")) {
+  if (!existsSync("./node_modules/@inquirer/input")) {
+    console.log("Installing @inquirer/input...");
+    execSync("bun i --trust", { stdio: "inherit" });
+
+    process.on("exit", () => {
+      execSync("bun run dev", { stdio: "inherit" });
+    });
+    process.exit();
+  }
+
   console.clear();
   const input = (await import("@inquirer/input")).default;
 
