@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,613 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model emr_patient {
+  id                   String        @id(map: "m_emr_patient_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  emr_number           String        @db.VarChar
+  patient_name         String        @db.VarChar
+  id_patient           String        @db.Uuid
+  doctor_name          String        @db.VarChar
+  id_doctor            String        @db.Uuid
+  encounter_type       String        @db.VarChar
+  appointment_date     DateTime      @db.Timestamptz(6)
+  careplan_description String?       @db.VarChar
+  created_date         DateTime      @db.Timestamptz(6)
+  created_by           String?       @db.Uuid
+  id_client            String        @db.Uuid
+  deleted_at           DateTime?     @db.Timestamptz(6)
+  t_encounter          t_encounter[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model emr_patient_anamnesis {
+  id                   String    @id(map: "emr_patient_anamnesis_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_emr_patient       String    @db.Uuid
+  condition_patient    String    @db.VarChar
+  medical_history      String?   @db.VarChar
+  familymember_history String?   @db.VarChar
+  allergy_intolerance  String?   @db.VarChar
+  medication_statement String?   @db.VarChar
+  created_by           String?   @db.Uuid
+  created_date         DateTime  @db.Timestamptz(6)
+  id_client            String    @db.Uuid
+  deleted_date         DateTime? @db.Timestamptz(6)
+}
+
+model emr_patient_diagnosis_treatment {
+  id             String    @id(map: "emr_patient_diagnosis_treatment_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_emr_patient String    @db.Uuid
+  diagnosis      String    @db.VarChar
+  id_diagnosis   String    @db.Uuid
+  treatment      String    @db.VarChar
+  id_treatment   String    @db.Uuid
+  medicine       String    @db.VarChar
+  id_medicine    String    @db.Uuid
+  medicine_rules String?   @db.VarChar
+  notes          String?   @db.VarChar
+  created_date   DateTime  @db.Timestamptz(6)
+  created_by     String?   @db.Uuid
+  id_client      String    @db.Uuid
+  deleted_at     DateTime? @db.Timestamptz(6)
+}
+
+model emr_patient_observation {
+  id               String    @id(map: "emr_patient_observation_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_emr_patient   String    @db.Uuid
+  heart_rate       String    @db.VarChar
+  breaths          String?   @db.VarChar
+  blood_pressure   String    @db.VarChar
+  body_temperature String?   @db.VarChar
+  responsiveness   String?   @db.VarChar
+  body_height      String?   @db.VarChar
+  body_weight      String?   @db.VarChar
+  mental_status    String?   @db.VarChar
+  created_date     DateTime  @db.Timestamptz(6)
+  created_by       String?   @db.Uuid
+  id_client        String    @db.Uuid
+  deleted_at       DateTime? @db.Timestamptz(6)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model emr_patient_service_request {
+  id                          String    @id(map: "emr_patient_service_request_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_emr_patient              String    @db.Uuid
+  service_request_type        String    @db.VarChar
+  service_request_description String    @db.VarChar
+  referral_destination        String?   @db.VarChar
+  referral_poli               String?   @db.VarChar
+  referral_doctor             String?   @db.VarChar
+  request_date                DateTime? @db.Timestamptz(6)
+  condition_patient           String    @db.VarChar
+  created_by                  String?   @db.Uuid
+  created_date                DateTime  @db.Timestamptz(6)
+  id_client                   String    @db.Uuid
+  deleted_at                  DateTime? @db.Timestamptz(6)
+}
+
+model m_client {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String?                 @db.VarChar
+  satusehat_id          String?                 @db.VarChar
+  deleted_at            DateTime?               @db.Timestamptz(6)
+  config                Json?
+  m_diagnosis           m_diagnosis[]
+  m_medical_service     m_medical_service[]
+  m_medicine            m_medicine[]
+  m_patient             m_patient[]
+  m_poli                m_poli[]
+  m_room                m_room[]
+  m_schedule_doctor     m_schedule_doctor[]
+  m_schedule_poli       m_schedule_poli[]
+  m_staff               m_staff[]
+  m_staff_role          m_staff_role[]
+  m_treatment           m_treatment[]
+  m_user                m_user[]
+  t_encounter           t_encounter[]
+  t_invoice             t_invoice[]
+  t_invoice_claim       t_invoice_claim[]
+  t_invoice_line        t_invoice_line[]
+  t_invoice_payment     t_invoice_payment[]
+  t_patient_queue       t_patient_queue[]
+  t_patient_room        t_patient_room[]
+  t_prescriptions       t_prescriptions[]
+  t_prescriptions_queue t_prescriptions_queue[]
+  t_satusehat_log       t_satusehat_log[]
+  t_staff_log           t_staff_log[]
+}
+
+model m_diagnosis {
+  id           String    @id(map: "m_diagnosis_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code         String    @db.VarChar
+  name         String    @db.VarChar
+  version      String?   @db.VarChar
+  created_date DateTime  @db.Timestamptz(6)
+  updated_date DateTime? @db.Timestamptz(6)
+  deleted_at   DateTime? @db.Timestamptz(6)
+  created_by   String?   @db.Uuid
+  updated_by   String?   @db.Uuid
+  id_client    String    @db.Uuid
+  m_client     m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model m_medical_service {
+  id           String        @id(map: "m_medical_service2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String        @db.VarChar
+  code         String?       @db.VarChar
+  description  String?       @db.VarChar
+  price        Float
+  id_medicine  String?       @db.Uuid
+  id_treatment String        @db.Uuid
+  created_by   String?       @db.Uuid
+  created_date DateTime      @db.Timestamptz(6)
+  updated_by   String?       @db.Uuid
+  updated_date DateTime?     @db.Timestamptz(6)
+  id_client    String        @db.Uuid
+  deleted_at   DateTime?     @db.Timestamptz(6)
+  m_client     m_client      @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_medicine   m_medicine?   @relation(fields: [id_medicine], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_treatment  m_treatment   @relation(fields: [id_treatment], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_encounter  t_encounter[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_medicine {
+  id                String              @id(map: "m_medicine2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String              @db.VarChar
+  name              String              @db.VarChar
+  package           String?             @db.VarChar
+  stock             Decimal?            @db.Decimal
+  expired_date      DateTime?           @db.Timestamptz(6)
+  manufacturer      String?             @db.VarChar
+  is_fast_moving    Boolean?
+  dosage            String?             @db.VarChar
+  price             Float?
+  ingredients       String?             @db.VarChar
+  created_date      DateTime            @default(now()) @db.Timestamptz(6)
+  updated_date      DateTime?           @db.Timestamptz(6)
+  created_by        String?             @db.Uuid
+  updated_by        String?             @db.Uuid
+  id_client         String              @db.Uuid
+  deleted_at        DateTime?           @db.Timestamptz(6)
+  m_medical_service m_medical_service[]
+  m_client          m_client            @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_prescriptions   t_prescriptions[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_patient {
+  id                    String                  @id(map: "m_patient_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String                  @db.VarChar
+  nik                   Decimal                 @db.Decimal
+  birth_date            DateTime                @db.Timestamptz(6)
+  birth_place           String?                 @db.VarChar
+  gender                String                  @db.VarChar
+  address               String?                 @db.VarChar
+  phone_number          Decimal?                @db.Decimal
+  ihs_number            String?                 @db.VarChar
+  emr_number            String?                 @db.VarChar
+  bpjs_number           Decimal?                @db.Decimal
+  multiple_birth        Boolean?
+  linked_patient_id     String?                 @db.Uuid
+  relationship_type     String?                 @db.VarChar
+  created_date          DateTime                @db.Timestamptz(6)
+  created_by            String?                 @db.Uuid
+  updated_by            String?                 @db.Uuid
+  updated_date          DateTime?               @db.Timestamptz(6)
+  id_client             String                  @db.Uuid
+  deleted_at            DateTime?               @db.Timestamptz(6)
+  m_client              m_client                @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_prescriptions_queue t_prescriptions_queue[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_poli {
+  id                String              @id(map: "m_poli2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String              @db.VarChar
+  status            String              @db.VarChar
+  created_date      DateTime            @db.Timestamptz(6)
+  created_by        String?             @db.Uuid
+  updated_date      DateTime?           @db.Timestamptz(6)
+  updated_by        String?             @db.Uuid
+  deleted_at        DateTime?           @db.Timestamptz(6)
+  id_client         String              @db.Uuid
+  m_client          m_client            @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_schedule_doctor m_schedule_doctor[]
+  m_schedule_poli   m_schedule_poli[]
+  t_encounter       t_encounter[]
+  t_patient_queue   t_patient_queue[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_room {
+  id             String           @id(map: "m_room2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String           @db.VarChar
+  status         String           @db.VarChar
+  service_class  String?          @db.VarChar
+  longitude      Decimal?         @db.Decimal
+  latitude       Decimal?         @db.Decimal
+  description    String?          @db.VarChar
+  created_date   DateTime         @db.Timestamptz(6)
+  created_by     String?          @db.Uuid
+  updated_date   DateTime?        @db.Timestamptz(6)
+  updated_by     String?          @db.Uuid
+  id_client      String           @db.Uuid
+  deleted_at     DateTime?        @db.Timestamptz(6)
+  m_client       m_client         @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_encounter    t_encounter[]
+  t_patient_room t_patient_room[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_schedule_doctor {
+  id            String        @id(map: "m_schedule_doctor_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  doctor_name   String        @db.VarChar
+  id_staff      String        @db.Uuid
+  id_poli       String?       @db.Uuid
+  day           String        @db.VarChar(200)
+  start_time    DateTime      @db.Time(6)
+  end_time      DateTime      @db.Time(6)
+  created_date  DateTime      @db.Timestamptz(6)
+  created_by    String?       @db.Uuid
+  updated_date  DateTime?     @db.Timestamptz(6)
+  updated_by    String?       @db.Uuid
+  id_client     String        @db.Uuid
+  deleted_at    DateTime?     @db.Timestamptz(6)
+  id_staff_role String?       @db.Uuid
+  m_client      m_client      @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_poli        m_poli?       @relation(fields: [id_poli], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_role  m_staff_role? @relation(fields: [id_staff_role], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model m_schedule_poli {
+  id           String    @id(map: "m_schedule_poli_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_poli      String    @db.Uuid
+  poli_name    String    @db.VarChar
+  day          String    @db.VarChar(200)
+  start_time   DateTime  @db.Time(6)
+  end_time     DateTime  @db.Time(6)
+  id_staff     String?   @db.Uuid
+  created_date DateTime  @db.Timestamptz(6)
+  created_by   String?   @db.Uuid
+  id_client    String    @db.Uuid
+  deleted_at   DateTime? @db.Timestamptz(6)
+  m_client     m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_poli       m_poli    @relation(fields: [id_poli], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model m_staff {
+  id                                                             String                  @id(map: "m_staff_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                                                           String                  @db.VarChar
+  nik                                                            Decimal                 @db.Decimal
+  birth_date                                                     DateTime?               @db.Timestamptz(6)
+  birth_place                                                    String?                 @db.VarChar
+  gender                                                         String?                 @db.VarChar
+  address                                                        String?                 @db.VarChar
+  ihs_number                                                     String?                 @db.VarChar
+  phone_number                                                   Decimal?                @db.Decimal
+  speciality                                                     String?                 @db.VarChar
+  id_staff_role                                                  String                  @db.Uuid
+  certified                                                      String?                 @db.VarChar
+  issuer                                                         String?                 @db.VarChar
+  start_date                                                     DateTime?               @db.Timestamptz(6)
+  end_date                                                       DateTime?               @db.Timestamptz(6)
+  created_date                                                   DateTime                @db.Timestamptz(6)
+  created_by                                                     String?                 @db.Uuid
+  updated_date                                                   DateTime?               @db.Timestamptz(6)
+  updated_by                                                     String?                 @db.Uuid
+  id_client                                                      String                  @db.Uuid
+  deleted_at                                                     DateTime?               @db.Timestamptz(6)
+  m_client                                                       m_client                @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_role                                                   m_staff_role            @relation(fields: [id_staff_role], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_encounter                                                    t_encounter[]
+  t_invoice                                                      t_invoice[]
+  t_patient_queue                                                t_patient_queue[]
+  t_patient_room                                                 t_patient_room[]
+  t_prescriptions_queue_t_prescriptions_queue_id_doctorTom_staff t_prescriptions_queue[] @relation("t_prescriptions_queue_id_doctorTom_staff")
+  t_prescriptions_queue_t_prescriptions_queue_id_staffTom_staff  t_prescriptions_queue[] @relation("t_prescriptions_queue_id_staffTom_staff")
+  t_staff_log                                                    t_staff_log[]
+}
+
+model m_staff_role {
+  id                String              @id(map: "m_role2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String?             @db.VarChar
+  created_date      DateTime            @db.Timestamptz(6)
+  created_by        String?             @db.Uuid
+  updated_date      DateTime?           @db.Timestamptz(6)
+  updated_by        String?             @db.Uuid
+  id_client         String              @db.Uuid
+  deleted_at        DateTime?           @db.Timestamptz(6)
+  m_schedule_doctor m_schedule_doctor[]
+  m_staff           m_staff[]
+  m_client          m_client            @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_user            m_user[]
+  t_staff_log       t_staff_log[]
+}
+
+model m_treatment {
+  id                String              @id(map: "m_treatment2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String              @db.VarChar
+  name              String              @db.VarChar
+  version           String?             @db.VarChar
+  created_date      DateTime            @db.Timestamptz(6)
+  updated_date      DateTime?           @db.Timestamptz(6)
+  created_by        String?             @db.Uuid
+  updated_by        String?             @db.Uuid
+  id_client         String              @db.Uuid
+  deleted_at        DateTime?           @db.Timestamptz(6)
+  m_medical_service m_medical_service[]
+  m_client          m_client            @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model m_user {
+  id            String       @id(map: "m_user2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  display_name  String?      @db.VarChar
+  email         String?      @db.VarChar
+  password      String?      @db.VarChar(255)
+  username      String?      @db.VarChar
+  id_staff_role String       @db.Uuid
+  created_date  DateTime     @db.Timestamptz(6)
+  created_by    String?      @db.Uuid
+  updated_date  DateTime?    @db.Timestamptz(6)
+  updated_by    String?      @db.Uuid
+  id_client     String       @db.Uuid
+  deleted_at    DateTime?    @db.Timestamptz(6)
+  m_client      m_client     @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_role  m_staff_role @relation(fields: [id_staff_role], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_bpjs_log {
+  id               String    @id(map: "t_bpjs_log_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_invoice       String    @db.Uuid
+  id_patient       String    @db.Uuid
+  patient_name     String    @db.VarChar
+  bpjs_number      String    @db.VarChar
+  transaction_date DateTime  @db.Timestamptz(6)
+  claim_amount     Float
+  claim_status     String    @db.VarChar
+  notes            String?   @db.VarChar
+  created_by       String?   @db.Uuid
+  created_date     DateTime  @db.Timestamptz(6)
+  id_client        String    @db.Uuid
+  deleted_at       DateTime? @db.Timestamptz(6)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_encounter {
+  id                 String             @id(map: "t_encounter2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  patient_name       String             @db.VarChar
+  id_patient         String             @db.Uuid
+  doctor_name        String?            @db.VarChar
+  id_staff           String?            @db.Uuid
+  encounter_type     String             @db.VarChar
+  encounter_date     DateTime           @db.Timestamptz(6)
+  id_poli            String?            @db.Uuid
+  id_room            String?            @db.Uuid
+  id_medical_service String?            @db.Uuid
+  id_emr_patient     String             @db.Uuid
+  created_date       DateTime           @db.Timestamptz(6)
+  created_by         String?            @db.Uuid
+  id_client          String             @db.Uuid
+  deleted_at         DateTime?          @db.Timestamptz(6)
+  m_client           m_client           @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  emr_patient        emr_patient        @relation(fields: [id_emr_patient], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_medical_service  m_medical_service? @relation(fields: [id_medical_service], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_poli             m_poli?            @relation(fields: [id_poli], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_room             m_room?            @relation(fields: [id_room], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff            m_staff?           @relation(fields: [id_staff], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_invoice {
+  id                String              @id(map: "t_invoice_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoice_number    String              @db.VarChar
+  patient_name      String              @db.VarChar
+  invoice_date      DateTime            @db.Timestamptz(6)
+  total_amount      Float
+  status            String              @db.VarChar
+  id_patient        String              @db.Uuid
+  id_staff          String              @db.Uuid
+  created_date      DateTime            @db.Timestamptz(6)
+  created_by        String?             @db.Uuid
+  id_client         String              @db.Uuid
+  deleted_at        DateTime?           @db.Timestamptz(6)
+  m_client          m_client            @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff           m_staff             @relation(fields: [id_staff], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_invoice_claim   t_invoice_claim[]
+  t_invoice_line    t_invoice_line[]
+  t_invoice_payment t_invoice_payment[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_invoice_claim {
+  id              String    @id(map: "t_invoice_claim_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_invoice      String    @db.Uuid
+  invoice_number  String    @db.VarChar
+  id_patient      String    @db.Uuid
+  patient_name    String    @db.VarChar
+  claim_date      DateTime  @db.Timestamptz(6)
+  payer_type      String    @db.VarChar
+  payer_number    String?   @db.VarChar
+  claim_amount    Float
+  approved_amount Float
+  claim_status    String    @db.VarChar
+  created_date    DateTime  @db.Timestamptz(6)
+  created_by      String?   @db.Uuid
+  id_client       String    @db.Uuid
+  deleted_at      DateTime? @db.Timestamptz(6)
+  m_client        m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_invoice       t_invoice @relation(fields: [id_invoice], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model t_invoice_line {
+  id           String    @id(map: "t_invoice_line_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_invoice   String    @db.Uuid
+  description  String    @db.VarChar
+  quantity     Decimal   @db.Decimal
+  unit_price   Float?
+  total_price  Float
+  created_date DateTime  @db.Timestamptz(6)
+  created_by   String?   @db.Uuid
+  id_client    String    @db.Uuid
+  deleted_at   DateTime? @db.Timestamptz(6)
+  m_client     m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_invoice    t_invoice @relation(fields: [id_invoice], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_invoice_payment {
+  id               String    @id(map: "t_invoice_payment_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  patient_name     String    @db.VarChar
+  invoice_number   String    @db.VarChar
+  payment_date     DateTime  @db.Timestamptz(6)
+  payment_method   String    @db.VarChar
+  amount_paid      Float
+  reference_number String?   @db.VarChar
+  id_patient       String    @db.Uuid
+  id_invoice       String    @db.Uuid
+  created_date     DateTime  @db.Timestamptz(6)
+  created_by       String?   @db.Uuid
+  id_client        String    @db.Uuid
+  deleted_at       DateTime? @db.Timestamptz(6)
+  status           String    @db.VarChar
+  m_client         m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_invoice        t_invoice @relation(fields: [id_invoice], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_patient_queue {
+  id                     String    @id(map: "t_patient_queue2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  patient_name           String    @db.VarChar
+  queue_number           String    @db.VarChar
+  registered_date        DateTime  @db.Timestamptz(6)
+  contact_name           String?   @db.VarChar
+  phone_number           Decimal?  @db.Decimal
+  channel_name           String?   @db.VarChar
+  queue_status           String    @db.VarChar
+  reschedule_date        DateTime? @db.Timestamptz(6)
+  referral_letter_number String?   @db.VarChar
+  referring_physician    String?   @db.VarChar
+  id_patient             String    @db.Uuid
+  id_doctor              String?   @db.Uuid
+  id_poli                String?   @db.Uuid
+  created_date           DateTime  @db.Timestamptz(6)
+  created_by             String?   @db.Uuid
+  id_client              String    @db.Uuid
+  deleted_at             DateTime? @db.Timestamptz(6)
+  is_referred            Boolean?
+  reservation_doctor     String?   @db.VarChar
+  reservation_poli       String?   @db.VarChar
+  reservation_date       DateTime? @db.Timestamptz(6)
+  m_client               m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff                m_staff?  @relation(fields: [id_doctor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_poli                 m_poli?   @relation(fields: [id_poli], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_patient_room {
+  id                     String    @id(map: "t_patient_room_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  patient_name           String    @db.VarChar
+  contact_name           String    @db.VarChar
+  phone_number           String?   @db.VarChar
+  admission_date         DateTime  @db.Timestamptz(6)
+  referral_letter_number String?   @db.VarChar
+  referring_physician    String?   @db.VarChar
+  room_name              String    @db.VarChar
+  doctor_name            String    @db.VarChar
+  id_patient             String    @db.Uuid
+  id_doctor              String?   @db.Uuid
+  id_room                String?   @db.Uuid
+  created_by             String?   @db.Uuid
+  created_date           DateTime  @db.Timestamptz(6)
+  id_client              String    @db.Uuid
+  deleted_at             DateTime? @db.Timestamptz(6)
+  admission_reason       String    @db.VarChar
+  m_client               m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff                m_staff?  @relation(fields: [id_doctor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_room                 m_room?   @relation(fields: [id_room], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_prescriptions {
+  id                    String                  @id(map: "t_prescriptions_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  patient_name          String                  @db.VarChar
+  doctor_name           String                  @db.VarChar
+  medicine_code         String                  @db.VarChar
+  medicine_name         String                  @db.VarChar
+  dosage                String?                 @db.VarChar
+  dosage_instructions   String                  @db.VarChar
+  notes                 String?                 @db.VarChar
+  id_patient            String                  @db.Uuid
+  id_doctor             String                  @db.Uuid
+  id_medicine           String                  @db.Uuid
+  id_staff              String?                 @db.Uuid
+  created_date          DateTime                @db.Timestamptz(6)
+  created_by            String?                 @db.Uuid
+  id_client             String                  @db.Uuid
+  deleted_at            DateTime?               @db.Timestamptz(6)
+  m_client              m_client                @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_medicine            m_medicine              @relation(fields: [id_medicine], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_prescriptions_queue t_prescriptions_queue[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_prescriptions_queue {
+  id                                               String           @id(map: "t_medicine_queue2_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  queue_number                                     Decimal          @db.Decimal
+  patient_name                                     String           @db.VarChar
+  doctor_name                                      String           @db.VarChar
+  date                                             DateTime         @db.Timestamptz(6)
+  prescription_status                              String           @db.VarChar
+  id_patient                                       String           @db.Uuid
+  id_doctor                                        String           @db.Uuid
+  id_prescription                                  String?          @db.Uuid
+  id_staff                                         String           @db.Uuid
+  created_date                                     DateTime         @db.Timestamptz(6)
+  created_by                                       String?          @db.Uuid
+  id_client                                        String           @db.Uuid
+  deleted_at                                       DateTime?        @db.Timestamptz(6)
+  m_client                                         m_client         @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_t_prescriptions_queue_id_doctorTom_staff m_staff          @relation("t_prescriptions_queue_id_doctorTom_staff", fields: [id_doctor], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_patient                                        m_patient        @relation(fields: [id_patient], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  t_prescriptions                                  t_prescriptions? @relation(fields: [id_prescription], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_t_prescriptions_queue_id_staffTom_staff  m_staff          @relation("t_prescriptions_queue_id_staffTom_staff", fields: [id_staff], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model t_satusehat_log {
+  id            String    @id(map: "t_satusehat_log_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  endpoint      String    @db.VarChar
+  request_body  Json
+  response_body Json?
+  status_code   Int
+  status        String    @db.VarChar
+  error_message String?   @db.VarChar
+  created_date  DateTime  @db.Timestamptz(6)
+  created_by    String?   @db.Uuid
+  id_client     String    @db.Uuid
+  deleted_at    DateTime? @db.Timestamptz(6)
+  resource_data Json      @default("{}")
+  m_client      m_client  @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model t_staff_log {
+  id                   String       @id(map: "t_staff_log_id") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id_staff             String       @db.Uuid
+  staff_name           String       @db.VarChar
+  id_staff_role        String       @db.Uuid
+  staff_role           String       @db.VarChar
+  activity_type        String       @db.VarChar
+  activity_description String?      @db.VarChar
+  date                 DateTime     @db.Timestamptz(6)
+  created_date         DateTime     @db.Timestamptz(6)
+  created_by           String?      @db.Uuid
+  id_client            String       @db.Uuid
+  deleted_at           DateTime?    @db.Timestamptz(6)
+  m_client             m_client     @relation(fields: [id_client], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff              m_staff      @relation(fields: [id_staff], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  m_staff_role         m_staff_role @relation(fields: [id_staff_role], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
