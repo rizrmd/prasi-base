@@ -44,6 +44,36 @@ if (!existsSync("./node_modules") || should_bun_install) {
   process.exit();
 }
 
+if (process.argv.includes("core")) {
+  const settings = existsSync(".vscode/settings.json")
+    ? JSON.parse(require("fs").readFileSync(".vscode/settings.json", "utf-8"))
+    : {};
+
+  settings["files.exclude"] = {
+    ...settings["files.exclude"],
+    "system": false
+  };
+
+  if (!existsSync(".vscode")) {
+    execSync("mkdir -p .vscode");
+  }
+  writeFileSync(".vscode/settings.json", JSON.stringify(settings, null, 2));
+} else {
+  const settings = existsSync(".vscode/settings.json")
+    ? JSON.parse(require("fs").readFileSync(".vscode/settings.json", "utf-8"))
+    : {};
+
+  settings["files.exclude"] = {
+    ...settings["files.exclude"],
+    "system": true
+  };
+
+  if (!existsSync(".vscode")) {
+    execSync("mkdir -p .vscode");
+  }
+  writeFileSync(".vscode/settings.json", JSON.stringify(settings, null, 2));
+}
+
 if (!existsSync("./backend/.env")) {
   console.clear();
   console.log("Setting up database configuration...");

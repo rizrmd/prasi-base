@@ -11,7 +11,8 @@
     ".gitignore": true,
     "node_modules": true,
     "bun.lockb": true,
-    ".gitmodules": true
+    ".gitmodules": true,
+    "system": true
   },
   "hide-files.files": [
     ".gitmodules"
