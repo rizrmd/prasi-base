@@ -43,7 +43,7 @@ if (!existsSync("./node_modules") || should_bun_install) {
   process.exit();
 }
 
-if (process.argv.includes("core")) {
+if (process.argv.includes("system")) {
   const settings = existsSync(".vscode/settings.json")
     ? JSON.parse(require("fs").readFileSync(".vscode/settings.json", "utf-8"))
     : {};
@@ -88,16 +88,13 @@ if (!existsSync("./backend/.env")) {
   const input = (await import("@inquirer/input")).default;
 
   console.log("Setting up database configuration...");
-  const askDb = await input({
-    message: "Do you want to configure DATABASE_URL? (y/N):",
-    default: "n",
+
+  const dburl = await input({
+    message: "Enter your DATABASE_URL:",
+    default: "postgresql://postgres:postgres@localhost:5432/prasi",
   });
 
-  if (askDb.toLowerCase() === "y") {
-    const dburl = await input({
-      message: "Enter your DATABASE_URL:",
-      default: "postgresql://postgres:postgres@localhost:5432/prasi",
-    });
+  if (dburl !== "postgresql://postgres:postgres@localhost:5432/prasi") {
     writeFileSync("./backend/.env", `DATABASE_URL="${dburl}"`);
     console.log("Database configuration saved.");
 
@@ -106,7 +103,10 @@ if (!existsSync("./backend/.env")) {
       stdio: "inherit",
     });
   } else {
-    console.log("Skipping database configuration.");
+    console.log("Using default database configuration. Skipping setup.");
+
+    writeFileSync("./backend/.env", ``);
+    console.log("Database configuration saved.");
   }
 }
 console.clear();
