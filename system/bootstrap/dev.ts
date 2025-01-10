@@ -2,6 +2,8 @@ import { existsSync } from "fs";
 import { execSync } from "child_process";
 import input from "@inquirer/input";
 import { writeFileSync } from "fs";
+
+let should_bun_install = false;
 if (!existsSync("./system/prasi-srv")) {
   console.log("Initializing submodules...");
 
@@ -11,6 +13,7 @@ if (!existsSync("./system/prasi-srv")) {
       stdio: "inherit",
     }
   );
+  should_bun_install = true
 }
 
 if (!existsSync("./system/nova")) {
@@ -31,7 +34,7 @@ if (!existsSync("./system/nova")) {
   }
 }
 
-if (!existsSync("./node_modules")) {
+if (!existsSync("./node_modules") || should_bun_install) {
   console.log("Installing dependencies...");
   execSync("bun i", { stdio: "inherit" });
 
