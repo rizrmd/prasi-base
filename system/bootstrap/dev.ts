@@ -111,4 +111,6 @@ if (!existsSync("./backend/.env")) {
 }
 console.clear();
 
+console.log("Starting Prasi...");
+
 await import("prasi-srv/standalone/server");
