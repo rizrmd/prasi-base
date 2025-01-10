@@ -5,7 +5,7 @@ export const server: PrasiServer = {
     system.init(arg.port);
   },
   http({ handle, req }) {
-    const response = system.router.handle(req);
+    const response = system.router.serve(req);
     if (response) {
       return response;
     }
