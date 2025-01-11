@@ -11,9 +11,7 @@
     ".gitignore": true,
     "node_modules": true,
     "bun.lockb": true,
-    "system": false,
-    ".gitmodules": true,
-    "backend/.gitignore": true,
-    "frontend/node_modules": true
+    "system": true,
+    "frontend/public/.gitkeep": true
   }
 }
