@@ -1,3 +1,3 @@
 export default () => {
-  return <div>Hello world</div>;
+  return <div className="bg-green-200">Boleh sih bisa juga </div>;
 };
