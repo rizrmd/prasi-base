@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "bun --watch run system/bootstrap/dev.ts --silent",
+    "dev": "bun --watch run system/init/dev.ts --silent",
     "prisma": "cd backend && bun prisma"
   },
   "workspaces": [
@@ -18,6 +18,8 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@rsbuild/core": "^1.1.3",
+    "@rsbuild/plugin-react": "^1.0.7",
     "@types/bun": "^1.1.16",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",

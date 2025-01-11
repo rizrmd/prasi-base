@@ -1,6 +1,5 @@
-import { existsSync } from "fs";
 import { execSync } from "child_process";
-import { writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 
 let should_bun_install = false;
 if (!existsSync("./system/prasi-srv")) {
@@ -17,20 +16,12 @@ if (!existsSync("./system/prasi-srv")) {
 
 if (!existsSync("./system/nova")) {
   console.log("Setting up -p Nova components...");
-  execSync("git clone --depth 1 https://github.com/rizrmd/prasi ./tmp-prasi", {
-    stdio: "inherit",
-  });
-  if (process.platform === "win32") {
-    execSync("if not exist .\\system\\nova mkdir .\\system\\nova");
-    execSync(
-      "xcopy .\\tmp-prasi\\frontend\\src\\nova\\prod\\* .\\system\\nova\\ /E /I /Y"
-    );
-    execSync("rmdir /S /Q .\\tmp-prasi");
-  } else {
-    execSync("mkdir -p ./system/nova");
-    execSync("cp -r ./tmp-prasi/frontend/src/nova/prod/* ./system/nova/");
-    execSync("rm -rf ./tmp-prasi");
-  }
+  execSync(
+    "git clone --depth 1 https://github.com/rizrmd/nova-static ./system/nova",
+    {
+      stdio: "inherit",
+    }
+  );
 }
 
 if (!existsSync("./node_modules") || should_bun_install) {

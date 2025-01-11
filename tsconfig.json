@@ -4,11 +4,17 @@
       "frontend/*": [
         "./frontend/*"
       ],
+      "@/*": [
+        "./frontend/app/*"
+      ],
       "backend/*": [
         "./backend/*"
       ],
       "system/*": [
         "./system/*"
+      ],
+      "prod/*": [
+        "./system/nova/*"
       ],
       "prasi-srv/*": [
         "./system/prasi-srv/*"
