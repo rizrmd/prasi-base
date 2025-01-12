@@ -1,95 +1,104 @@
-import { apiClient, apiResult } from 'system/api';
-import { useLocal } from '@/lib/use-local';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useLocal } from "@/lib/use-local";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { apiClient, apiResult } from "system/api";
 
-const api_otp = apiClient({
-  url: 'api/otp',
-  sampleData(phone_number: string) {
-    if (!phone_number) {
-      throw new Error('Phone number is required');
-    }
-    return { success: true };
+const api_sholat = apiClient({
+  url: "api/sholat",
+  sampleData() {
+    return {
+      schedule: {
+        fajr: "04:30",
+        dhuhr: "11:45",
+        asr: "15:15",
+        maghrib: "17:45",
+        isha: "19:00",
+      },
+    };
   },
 });
 
-const api_verify = apiClient({
-  url: 'api/otp/verify',
-  sampleData(phone_number: string, otp_code: string) {
-    if (!otp_code || otp_code.length !== 6) {
-      throw new Error('Invalid OTP code');
-    }
-    return { verified: true };
-  },
-});
+const lang_sholat = {
+  title: "Jadwal Sholat",
+  fajr: "Subuh",
+  dhuhr: "Dzuhur",
+  asr: "Ashar",
+  maghrib: "Maghrib",
+  isha: "Isya",
+  loading: "Memuat jadwal...",
+  error: "Gagal memuat jadwal",
+};
 
 export default () => {
-  const local = useLocal({
-    phone_number: '',
-    otp_code: '',
-    request_otp: apiResult(api_otp),
-    verify_otp: apiResult(api_verify),
-  });
+  const local = useLocal(() => ({
+    schedule: apiResult(api_sholat, {
+      onResult(result) {
+        local.set((d) => {
+          d.data = result.value?.schedule;
+          d.error = result.error;
+        });
+      },
+    }),
+    data: null as any,
+    error: "",
+  }));
+
+  useEffect(() => {
+    local.schedule.call();
+  }, []);
 
   return (
-    <div className="p-4">
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        if (!local.request_otp.loading) {
-          local.request_otp.call(local.phone_number);
-        }
-      }}>
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          value={local.phone_number}
-          onChange={(e) => {
-            local.set(data => {
-              data.phone_number = e.currentTarget.value;
-            });
-          }}
-          className="border p-2 border-gray-100 rounded-lg mb-2 w-full"
-        />
-        {local.request_otp.result && (
-          <div className="mt-4">
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              maxLength={6}
-              value={local.otp_code}
-              onChange={(e) => {
-                local.set(data => {
-                  data.otp_code = e.currentTarget.value.replace(/\D/g, '');
-                });
-              }}
-              className="border p-2 border-gray-100 rounded-lg mb-2 w-full"
-            />
-            <button
-              type="button"
-              onClick={() => local.verify_otp.call(local.phone_number, local.otp_code)}
-              className="border p-2 border-gray-100 rounded-lg w-full"
-              disabled={local.verify_otp.loading}
-            >
-              Verify OTP
-            </button>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>{lang_sholat.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {local.schedule.status === "loading" && (
+          <div className="flex items-center justify-center p-4">
+            <Loader2 className="animate-spin mr-2" />
+            <p>{lang_sholat.loading}</p>
           </div>
         )}
-        <button
-          type="submit"
-          className="border p-2 border-gray-100 rounded-lg w-full mt-2"
-          disabled={local.request_otp.loading}
-        >
-          {local.request_otp.loading ? 'Sending...' : 'Send OTP'}
-        </button>
-        
-        {local.request_otp.error && (
-          <div className="text-red-500 mt-2">{local.request_otp.error.message}</div>
+
+        {local.schedule.status === "error" && (
+          <Alert variant="destructive">
+            <AlertTitle>{lang_sholat.error}</AlertTitle>
+            <AlertDescription>{local.error}</AlertDescription>
+          </Alert>
         )}
-        {local.verify_otp.error && (
-          <div className="text-red-500 mt-2">{local.verify_otp.error.message}</div>
+
+        {local.schedule.status === "done" && local.data && (
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell>{lang_sholat.fajr}</TableCell>
+                <TableCell className="text-right">{local.data.fajr}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{lang_sholat.dhuhr}</TableCell>
+                <TableCell className="text-right">{local.data.dhuhr}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{lang_sholat.asr}</TableCell>
+                <TableCell className="text-right">{local.data.asr}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{lang_sholat.maghrib}</TableCell>
+                <TableCell className="text-right">
+                  {local.data.maghrib}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{lang_sholat.isha}</TableCell>
+                <TableCell className="text-right">{local.data.isha}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         )}
-        {local.verify_otp.result?.verified && (
-          <div className="text-green-500 mt-2">OTP verified successfully!</div>
-        )}
-      </form>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "bun --watch run system/init/dev.ts --silent",
-    "prisma": "cd backend && bun prisma"
+    "prisma": "cd backend && bun prisma",
+    "shadcn": "cd frontend && bunx --bun shadcn@latest"
   },
   "workspaces": [
     "backend/",

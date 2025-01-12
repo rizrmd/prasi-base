@@ -11,7 +11,7 @@
     ".gitignore": true,
     "node_modules": true,
     "bun.lockb": true,
-    "system": false,
+    "system": true,
     "frontend/public/.gitkeep": true
   },
   "github.copilot.chat.codeGeneration.instructions": [
@@ -26,6 +26,10 @@
     },
     {
       "file": ".vscode/copilot-instructions.md"
+    },
+    {
+      "file": ".vscode/ui-gen.md"
     }
-  ]
+  ],
+  "hide-files.files": []
 }

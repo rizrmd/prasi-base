@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+#root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -45,7 +58,7 @@
     --secondary-foreground: 210 40% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    --ring: 216 34% 17%; 
+    --ring: 216 34% 17%;
   }
 }
 
