@@ -1,4 +1,4 @@
-import system from "standalone/system";
+import system from "system/system";
 
 export const server: PrasiServer = {
   async init(arg) {

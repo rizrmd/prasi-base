@@ -10,9 +10,6 @@
       "backend/*": [
         "./backend/*"
       ],
-      "system/*": [
-        "./system/*"
-      ],
       "prod/*": [
         "./system/nova/*"
       ],
@@ -22,7 +19,7 @@
       "utils/*": [
         "./system/prasi-srv/internal/utils*"
       ],
-      "standalone/*": [
+      "system/*": [
         "./system/prasi-srv/standalone/*"
       ],
       

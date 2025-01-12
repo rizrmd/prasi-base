@@ -11,7 +11,21 @@
     ".gitignore": true,
     "node_modules": true,
     "bun.lockb": true,
-    "system": true,
+    "system": false,
     "frontend/public/.gitkeep": true
-  }
+  },
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "always use lower cased snake case for variable name."
+    },
+    {
+      "text": "always use camelCase for function/method name."
+    },
+    {
+      "text": "Do not use useState in react. Do not use FormData."
+    },
+    {
+      "file": ".vscode/copilot-instructions.md"
+    }
+  ]
 }
