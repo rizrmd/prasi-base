@@ -4,6 +4,6 @@ import Layout from "./app/layout";
 
 initFrontend({ layout: <Layout /> });
 
-const _ = (
+export const html = (
   <div className="relative flex flex-1 items-center justify-center"></div>
 );

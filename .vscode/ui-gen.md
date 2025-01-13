@@ -278,6 +278,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+//`DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+//If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
 <Dialog>
   <DialogTrigger>Open</DialogTrigger>
   <DialogContent>
@@ -341,7 +343,9 @@ import { Input } from "@/components/ui/input";
 
 ```jsx
 import { Label } from "@/components/ui/label";
-<Label htmlFor="email" required>Your email address</Label>;
+<Label htmlFor="email" required>
+  Your email address
+</Label>;
 ```
 
 ### Available Component 19, menubar:
@@ -724,7 +728,9 @@ import { Home, User, Settings } from "lucide-react";
 ### Available Component 43, BarChart:
 
 ```jsx
-import { ResponsiveBar } from "@nivo/bar";
+import { Bar, BarChart } from "recharts";
+
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/charts";
 
 function BarChart(props) {
   return (
@@ -940,6 +946,56 @@ function PieChart(props) {
   <main className="flex-1 overflow-y-auto p-4">Main content goes here.</main>
   <footer className="bg-white p-4 shadow-sm">Footer content goes here.</footer>
 </div>
+```
+
+### Available Component 51, Breadcrumb:
+
+```jsx
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="flex items-center gap-1">
+          <BreadcrumbEllipsis className="h-4 w-4" />
+          <span className="sr-only">Toggle menu</span>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem>Documentation</DropdownMenuItem>
+          <DropdownMenuItem>Themes</DropdownMenuItem>
+          <DropdownMenuItem>GitHub</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/docs/components">Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
 ```
 
 Create JSX code when you get the detailed instructions.

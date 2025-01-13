@@ -2,7 +2,10 @@ Always use apiClient, apiResult, and useLocal for state management and api.
 
 apiResult.status only has "init" | "loading" | "done" | "error" status.
 Please initialize data in local from apiResult when needed, do not use "any" keyword.
-Do not return global loading placeholder, use loading in respective places when apiResult.status is loading.
+Do not return global loading placeholder, use <Skeleton> in respective places when apiResult.status is loading, like this:
+
+import { Skeleton } from "@/components/ui/skeleton";
+<Skeleton className="w-[100px] h-[20px] rounded-full" />;
 
 apiClient.sampleData is an async function that should directly return static data, simplify arguments needed for it.
 
@@ -10,7 +13,12 @@ All message, label, options and error that shown to user should be in bahasa ind
 
 When you create a form, include error handling for respective field.
 
+Do not use popup to edit or create data, create link instead:
+import { NavLink } from "react-router";
+<NavLink to="/data/edit/"> Edit </NavLink>
+
 Follow example below:
+
 import { apiClient, apiResult } from "system/api";
 import { useLocal } from "@/lib/use-local";
 import { Input } from "@/components/ui/input";
